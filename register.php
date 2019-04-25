@@ -88,8 +88,9 @@ if (empty($name_err) && empty($password_err) && empty($email_err) && empty($surn
         $param_email = $email;
         $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
 
+
         if ($stmt->execute()) {
-            $success_msg = "Lietotāja reģistrācija veiksmīga!";
+            $success_msg = "Lietotāja reģistrācija veiksmīga!";	
         } else {
             $register_err = "Oops! Kaut kas nogāja greizi. Lūdzu mēģiniet atkal nedaudz vēlāk!";
         }

@@ -96,3 +96,7 @@ ALTER TABLE `users`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+INSERT INTO `data` (`id`, `user_id`, `period_start`, `period_end`, `bruto`, `taxes_employee`, `taxes_employer`, `neto`, `created_at`) VALUES
+(1, 26, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 960, 250, 150, 710, '2019-04-23 19:25:08');
+
