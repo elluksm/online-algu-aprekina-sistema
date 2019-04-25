@@ -65,8 +65,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `name`, `surname`, `personal_code`, `email`, `role`, `password`, `created_at`) VALUES
 (24, 'JÄnis', 'BÄ“rziÅ†Å¡', '080187-12345', 'admin@b.lv', 'admin', '$2y$10$UiKGf8ofeQnVij6qq.hYouyg4do5Y0emsdlSSUS/g99OT6LwZ7r96', '2019-03-24 19:23:34'),
 (25, 'KristÄ«ne', 'Liepa', '090180-12345', 'gramatvedis@b.lv', 'edit', '$2y$10$dWbKLWso3uCdd8DrLmJv/OQSdlMos6YKFDrZLmoJ6EwDMdvfrE99e', '2019-03-24 19:24:48'),
-(26, 'LÄ«ga', 'Vanaga', '021187-12345', 'liga@b.lv', 'view', '$2y$10$oqgPEuDINjS9tA26YSxUKucV58jFqDhPtANfefkyHGZ6.PUJhpQyi', '2019-03-24 19:25:40');
-
+(26, 'Andra', 'Vesma', '210888-12035', 'andra@b.lv', 'view', '$2y$10$oLoA9W02erleBX8BOv8MUOgJrPX0YvVGphYl/DgyZUXueg/WWYLZa', '2019-03-25 14:15:06'),
+(26, 'Lauris', 'Reksnis', '110175-11039', 'lauris@b.lv', 'view', '$2y$10$QGFAhJzvLOQXEkycOucsYeTQlE6PtS88vVednYlfpgrYII7HnMKnW', '2019-03-26 11:58:21'),
+(26, 'Zane', 'Vasa', '050580-10101', 'zane@b.lv', 'view', '$2y$10$LnEt3fsudTFn91hZhnGiseYfwoKwaqd7v3eBrJgmswLa6xKIceAgW', '2019-03-27 16:03:38');
 --
 -- Indexes for dumped tables
 --
