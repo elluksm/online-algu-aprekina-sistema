@@ -78,33 +78,7 @@ class EditData
 {
     public static function editSalary($pdo, $newSalary, $id)
     {
-					/*
-					$param_id = 3;
-						$param_user_id = $id;
-						$param_period_start = '2019-04-01 00:00:01';
-						$param_period_end = '2019-04-30 00:00:00';
-						$param_bruto = 784;
-						$param_taxes_employee = 251;
-						$param_taxes_employer = 155;
-						$param_neto = 711;
-						$param_created_at = '2019-04-24 22:25:08';
-
-						$sql2 = "insert into `data` (`id`, `user_id`, `period_start`, `period_end`, `bruto`, `taxes_employee`, `taxes_employer`, `neto`, `created_at`) VALUES (:id, :user_id, :period_start, :period_end, :bruto, :taxes_employee, :taxes_employer, :neto, :created_at)";
-					
-						$statement1 = $pdo->prepare($sql2);
-						$statement1->bindParam(":id", $param_id, PDO::PARAM_INT);
-						$statement1->bindParam(":user_id", $id, PDO::PARAM_INT);
-						$statement1->bindParam(":period_start", $param_period_start, PDO::PARAM_STR);
-						$statement1->bindParam(":period_end", $param_period_end, PDO::PARAM_STR);
-						$statement1->bindParam(":bruto", $param_bruto, PDO::PARAM_STR);
-						$statement1->bindParam(":taxes_employee", $param_taxes_employee, PDO::PARAM_STR);
-						$statement1->bindParam(":taxes_employer", $param_taxes_employer, PDO::PARAM_STR);
-						$statement1->bindParam(":neto", $param_neto, PDO::PARAM_STR);
-						$statement1->bindParam(":created_at", $param_created_at, PDO::PARAM_STR);
-
-						$statement1->execute();	
-			*/			
-
+			
         $statement = $pdo->prepare("update data set bruto = '$newSalary', taxes_employee = round('$newSalary' * 0.11 + (('$newSalary' - ('$newSalary' * 0.11)) * 0.2),2) , taxes_employer = round('$newSalary' * 0.2409,2), neto = '$newSalary'- taxes_employee where id = '$id'");
         $statement->bindParam($id, $newSalary, PDO::PARAM_STR);
         $statement->execute();
