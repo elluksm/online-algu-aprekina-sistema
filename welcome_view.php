@@ -22,7 +22,7 @@ class Salary
     public $taxes_employee;
     public $taxes_employer;
     public $neto;
-    public $created_at;
+    public $date;
 }
 
 class ReadOwnData
@@ -30,7 +30,7 @@ class ReadOwnData
     //function to read data from User table
     public static function readDataTable($pdo, $user_id)
     {
-        $statement = $pdo->prepare("select * from data where data.user_id = '$user_id'");
+        $statement = $pdo->prepare("SELECT id, user_id, period_start, period_end, bruto, taxes_employee, taxes_employer, neto, date(created_at) as date FROM data WHERE data.user_id = '$user_id'");
         $statement->execute();
 
         $salaryData = $statement->fetchAll(PDO::FETCH_CLASS, "Salary");
@@ -60,6 +60,7 @@ require "header.php";
                         <th scope="col">Aprekinats</th>
                         <th scope="col">Ieturets</th>
                         <th scope="col">Izmaksats</th>
+						<th scope="col">Parrekina datums</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +70,7 @@ require "header.php";
                                 <td><?= $salary->bruto ?></td>
                                 <td><?= $salary->taxes_employee ?></td>
 								<td><?= $salary->neto ?></td>
+								<td><?= $salary->date ?></td>
                             </form>
                         </tr>
                     <?php }; ?>

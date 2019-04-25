@@ -22,7 +22,7 @@ class User
     public $email;
     public $password;
     public $created_at;
-	/*
+	
 	public $id_2;
 	public $user_id;
     public $period_start;
@@ -31,17 +31,19 @@ class User
     public $taxes_employee;
     public $taxes_employer;
     public $neto;
-    public $created_at_2;*/
+    public $created_at_2;
 }
 
 class Data
 {
     //create Data object when reading data from database
-    public $sum_user_id;
+    public $count_user_id;
 	public $sum_bruto;
     public $sum_taxes_employee;
     public $sum_taxes_employer;
     public $sum_neto;
+	public $sum_sum;
+	public $created_at;
 
 }
 
@@ -50,11 +52,12 @@ class ReadData
     //function to read data from User table
     public static function readUserTable($pdo)
     {
-        $statement = $pdo->prepare("select * from users left outer join data on users.id=data.user_id where users.role = 'view'");
+        $statement = $pdo->prepare("SELECT * FROM users LEFT OUTER JOIN data ON users.id=data.user_id WHERE users.role = 'view'");
         $statement->execute();
 
         $users = $statement->fetchAll(PDO::FETCH_CLASS, "User");
         return $users;
+
     }
 }
 
@@ -63,10 +66,10 @@ class ReadSumData
     //function to read data from Data table
     public static function readDataTable($pdo)
     {
-        $statement2 = $pdo->prepare("SELECT COUNT(user_id), SUM(bruto), SUM(taxes_employee), SUM(taxes_employer), SUM(neto) FROM data");
-        $statement2->execute();
+        $statement = $pdo->prepare("SELECT COUNT(user_id) as count_user_id, ROUND(SUM(bruto),2) as sum_bruto, ROUND(SUM(taxes_employee),2) as sum_taxes_employee, ROUND(SUM(taxes_employer),2) as sum_taxes_employer, ROUND(SUM(neto),2) as sum_neto, ROUND(SUM(bruto)+SUM(taxes_employer),2) as sum_sum FROM data");
+        $statement->execute();
 
-        $sumSalary = $statement2->fetchAll(PDO::FETCH_CLASS, "Data");
+        $sumSalary = $statement->fetchAll(PDO::FETCH_CLASS, "Data");
         return $sumSalary;
     }
 }
@@ -145,6 +148,7 @@ require "header.php";
                         <th scope="col">Alga bruto</th>
                         <th scope="col">Alga neto</th>
 						<th scope="col">Izmaksas uznemumam</th>
+						<th scope="col">Parrekina laiks</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -158,6 +162,7 @@ require "header.php";
 								<input hidden type="text" name="user_id" value=<?= $user->id ?>>
                                 <td><?= $user->neto ?></td>
 								<td><?= $user->bruto + $user->taxes_employer ?></td>
+								<td><?= $user->created_at ?></td>
                                 <td><button type="submit" class="btn btn-danger uppercase" value="calculate">Aprekinat</button></td>
                             </form>
                         </tr>
@@ -169,23 +174,25 @@ require "header.php";
 			<table class="table table-hover user_table">
                 <thead>
                     <tr>
-                        <th scope="col">Darbinieki</th>
+                        <th scope="col">Darbinieku skaits</th>
                         <th scope="col">Bruto algas</th>
-                        <th scope="col">Darbinieka nodokli</th>
-                        <th scope="col">Darba deveja nodokli</th>
 						<th scope="col">Neto algas</th>
+                        <th scope="col">Darbinieku nodokli</th>
+                        <th scope="col">Darba deveja nodokli</th>
+						<th scope="col">Kopejas izmaksas</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($sumSalary as $salary) { ?>
                         <tr>
-                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+
+                                <td><?= $salary->count_user_id ?></td>
                                 <td><?= $salary->sum_bruto ?></td>
-                                <td><?= $salary->sum_bruto ?></td>
+								<td><?= $salary->sum_neto ?></td>
                                 <td><?= $salary->sum_taxes_employee ?></td>
 								<td><?= $salary->sum_taxes_employer ?></td>
-                                <td><?= $salary->sum_neto ?></td>
-                            </form>
+								<td><?= $salary->sum_sum ?></td>
+						
                         </tr>
                     <?php }; ?>
                 </tbody>
