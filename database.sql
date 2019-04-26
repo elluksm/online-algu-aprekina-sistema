@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `data` (
   `taxes_employee` float NOT NULL,
   `taxes_employer` float NOT NULL,
   `neto` float NOT NULL,
+  `dependents` int(2) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -104,9 +105,9 @@ ALTER TABLE `data` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 
-INSERT INTO `data` (`id`, `user_id`, `period_start`, `period_end`, `bruto`, `taxes_employee`, `taxes_employer`, `neto`, `created_at`) VALUES
-(1, 26, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 886, 255.17, 213.44, 630.83, '2019-04-15 11:04:28'),
-(2, 27, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 561, 161.57, 135.14, 399.43, '2019-04-16 12:38:45'),
-(3, 28, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 782.5, 225.36, 188.5, 557.14, '2019-04-17 16:25:31'),
-(4, 29, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 1240, 357.12, 298.72, 882.88, '2019-04-18 09:56:00');
+INSERT INTO `data` (`id`, `user_id`, `period_start`, `period_end`, `bruto`, `taxes_employee`, `taxes_employer`, `neto`, `dependents`, `created_at`) VALUES
+(1, 26, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 886, 255.17, 213.44, 630.83, 0, '2019-04-15 11:04:28'),
+(2, 27, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 561, 161.57, 135.14, 399.43, 2, '2019-04-16 12:38:45'),
+(3, 28, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 782.5, 225.36, 188.5, 557.14, 1, '2019-04-17 16:25:31'),
+(4, 29, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 1240, 357.12, 298.72, 882.88, 0, '2019-04-18 09:56:00');
 

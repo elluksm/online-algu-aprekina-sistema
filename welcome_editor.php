@@ -31,6 +31,7 @@ class User
     public $taxes_employee;
     public $taxes_employer;
     public $neto;
+	public $dependents;
     public $created_at_2;
 }
 
@@ -76,11 +77,11 @@ class ReadSumData
 
 class EditData
 {
-    public static function editSalary($pdo, $newSalary, $id)
+    public static function editSalary($pdo, $newSalary, $id, $newDependents)
     {
 			
-        $statement = $pdo->prepare("update data set bruto = '$newSalary', taxes_employee = round('$newSalary' * 0.11 + (('$newSalary' - ('$newSalary' * 0.11)) * 0.2),2) , taxes_employer = round('$newSalary' * 0.2409,2), neto = '$newSalary'- taxes_employee where id = '$id'");
-        $statement->bindParam($id, $newSalary, PDO::PARAM_STR);
+        $statement = $pdo->prepare("UPDATE data SET bruto = round('$newSalary',2), taxes_employee = round('$newSalary' * 0.11 + (greatest((('$newSalary' - ('$newSalary' * 0.11)) - '$newDependents' * 230), 0) * 0.20),2) , taxes_employer = round('$newSalary' * 0.2409,2), neto = '$newSalary'- taxes_employee, dependents = '$newDependents' WHERE id = '$id'");
+        $statement->bindParam($id, $newSalary, $newDependents, PDO::PARAM_STR);
         $statement->execute();
 
 	}
@@ -90,14 +91,22 @@ require "db_connect.php";
 
 $users = ReadData::readUserTable($pdo);
 $sumSalary = ReadSumData::readDataTable($pdo);
+$salary_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-if (isset ($_POST['newSalary']))
+if (isset ($_POST['newSalary']) || isset ($_POST['newDependents']))
+
 	$newSalary = $_POST['newSalary'];
 	$id = $_POST['user_id'];
+	$newDependents = $_POST['newDependents'];
 
-	EditData::editSalary($pdo, $newSalary, $id);
+	if ($newSalary < 430 || $newDependents < 0 || $newDependents > 10) {
+		$salary_err = "Ludzu ievadi derigu skaitli!";
+	} else
+	{
+		EditData::editSalary($pdo, $newSalary, $id, $newDependents);
+	}
 
     header("location: welcome_editor.php");
 }
@@ -120,10 +129,10 @@ require "header.php";
                         <th scope="col">Vards</th>
                         <th scope="col">Uzvards</th>
                         <th scope="col">Alga bruto</th>
+						<th scope="col">Apgadajamie</th>
                         <th scope="col">Alga neto</th>
 						<th scope="col">Izmaksas uznemumam</th>
 						<th scope="col">Parrekina laiks</th>
-                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,8 +141,9 @@ require "header.php";
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                                 <td><?= $user->name ?></td>
                                 <td><?= $user->surname ?></td>
-                                <td><input type="text" name="newSalary" value="<?= $user->bruto ?>"></td>
+                                <td><input type="text" name="newSalary" value="<?= $user->bruto ?>">
 								<input hidden type="text" name="user_id" value=<?= $user->id ?>>
+								<td><input type="text" name="newDependents" value="<?= $user->dependents ?>">
                                 <td><?= $user->neto ?></td>
 								<td><?= $user->bruto + $user->taxes_employer ?></td>
 								<td><?= $user->created_at ?></td>
