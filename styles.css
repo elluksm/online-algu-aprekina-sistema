@@ -120,7 +120,8 @@ hr {
 
 table .btn {
   font-size: 11px;
-  width: 80px;
+  width: 110px;
+  height: 25px;
   height: 25px;
 }
 
@@ -169,6 +170,13 @@ table .btn {
   color: white;
 }
 
+.salary_table {
+	color: red;
+}
+
+h4 {
+	padding-bottom: 30px;
+}
 
 /* Background animation */
 @-webkit-keyframes bgzoom {

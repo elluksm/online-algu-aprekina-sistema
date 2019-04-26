@@ -92,23 +92,44 @@ require "db_connect.php";
 $users = ReadData::readUserTable($pdo);
 $sumSalary = ReadSumData::readDataTable($pdo);
 $salary_err = "";
+$dependent_err = "";
+$error_id = 0;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-if (isset ($_POST['newSalary']) || isset ($_POST['newDependents']))
+if (isset ($_POST['newSalary']) || isset ($_POST['newDependents']) ) {
 
 	$newSalary = $_POST['newSalary'];
 	$id = $_POST['user_id'];
 	$newDependents = $_POST['newDependents'];
+	
 
-	if ($newSalary < 430 || $newDependents < 0 || $newDependents > 10 || ctype_digit($newDependents) == null  ) {
-		$salary_err = "Ludzu ievadi derigu skaitli!";
-	} else
+	if ( ($newSalary <= 0) || ($newSalary < 430) || ($newDependents < 0) || ($newDependents > 10) || (ctype_digit($newDependents) == null) ) {
+
+		if ($newSalary <= 0) {
+		$salary_err = "Ludzu ievadi derigu algu!";
+		$error_id = $id;
+		}
+
+		if ($newSalary > 0 && $newSalary < 430) {
+		$salary_err = "Ludzu ievadi vismaz minimalo algu!";
+		$error_id = $id;
+		}
+
+		if ($newDependents < 0 || $newDependents > 10 || ctype_digit($newDependents) == null  ) {
+				$dependent_err = "Ludzu ievadi derigu apgadajamo skaitu!";
+				$error_id = $id;
+		}
+	}
+	else
 	{
 		EditData::editSalary($pdo, $newSalary, $id, $newDependents);
+		header("location: welcome_editor.php");
+		$dependent_err = "";
+		$salary_err = "";
+		$error_id = 0;
 	}
-
-    header("location: welcome_editor.php");
+}
 }
 
 require "header.php";
@@ -141,22 +162,36 @@ require "header.php";
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                                 <td><?= $user->name ?></td>
                                 <td><?= $user->surname ?></td>
-
-								<div <?php echo (!empty($salary_err)) ? "has-error" : ""; ?>>
-                                <td><input type="text" name="newSalary" value="<?= $user->bruto ?>"></td>
-								<span class="help-block"><?= $salary_err ?></span></div>
-
+                                <td><input type="text" name="newSalary" value="<?= $user->bruto ?>">
+									<div class="help-block salary_table">
+									<?php 
+										if ($user->id == $error_id) {
+											echo $salary_err;
+										}
+									?>
+									</div>
 								<input hidden type="text" name="user_id" value=<?= $user->id ?>>
 								<td><input type="text" name="newDependents" value="<?= $user->dependents ?>">
+									<div class="help-block salary_table">
+									<?php 
+										if ($user->id == $error_id) {
+											echo $dependent_err;
+										} 
+										?>
+									</div>
                                 <td><?= $user->neto ?></td>
 								<td><?= $user->bruto + $user->taxes_employer ?></td>
 								<td><?= $user->created_at ?></td>
-                                <td><button type="submit" class="btn btn-danger uppercase" value="calculate">Aprekinat</button></td>
+                                <td><button type="submit" class="btn btn-danger uppercase" value="calculate">Parrekinat</button></td>
                             </form>
                         </tr>
                     <?php }; ?>
                 </tbody>
             </table>
+
+					<!--<div class="help-block salary_table"><?= $salary_err ?></div></td>
+					<div class="help-block salary_table"><?= $dependent_err ?></div>-->
+
 
 			<br><h1>Kopsummas</h1><br>
 			<table class="table table-hover user_table">

@@ -26,6 +26,16 @@ class Salary
     public $date;
 }
 
+class Name
+{
+	public $id;
+    public $name;
+    public $surname;
+    public $personal_code;
+    public $email;
+
+}
+
 class ReadOwnData
 {
     //function to read data from User table
@@ -39,9 +49,22 @@ class ReadOwnData
     }
 }
 
+class ReadPersonalData
+{
+	public static function readUserData($pdo, $user_id)
+    {
+        $statement = $pdo->prepare("SELECT id, name, surname, personal_code, email FROM users WHERE id = '$user_id'");
+        $statement->execute();
+
+        $personalData = $statement->fetchAll(PDO::FETCH_CLASS, "Name");
+        return $personalData;
+    }
+}
+
 require "db_connect.php";
 
 $salaryData = ReadOwnData::readDataTable($pdo, $user_id);
+$personalData = ReadPersonalData::readUserData($pdo, $user_id);
 
 require "header.php";
 ?>
@@ -51,6 +74,9 @@ require "header.php";
 <main class="container">
     <div class="row">
         <div class="dark_container col-12">
+
+		<span><h4><?php foreach ($personalData as $person) {echo "Sveiki, " . $person->name . " ". $person->surname . "!";} ?></h4>
+		</span>
 
             <a href="logout.php" class="btn btn_logout uppercase" id="signout">Iziet</a>
             <h1>Mana alga</h1>
