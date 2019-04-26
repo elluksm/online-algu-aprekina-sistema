@@ -101,7 +101,7 @@ if (isset ($_POST['newSalary']) || isset ($_POST['newDependents']))
 	$id = $_POST['user_id'];
 	$newDependents = $_POST['newDependents'];
 
-	if ($newSalary < 430 || $newDependents < 0 || $newDependents > 10) {
+	if ($newSalary < 430 || $newDependents < 0 || $newDependents > 10 || ctype_digit($newDependents) == null  ) {
 		$salary_err = "Ludzu ievadi derigu skaitli!";
 	} else
 	{
@@ -141,7 +141,11 @@ require "header.php";
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                                 <td><?= $user->name ?></td>
                                 <td><?= $user->surname ?></td>
-                                <td><input type="text" name="newSalary" value="<?= $user->bruto ?>">
+
+								<div <?php echo (!empty($salary_err)) ? "has-error" : ""; ?>>
+                                <td><input type="text" name="newSalary" value="<?= $user->bruto ?>"></td>
+								<span class="help-block"><?= $salary_err ?></span></div>
+
 								<input hidden type="text" name="user_id" value=<?= $user->id ?>>
 								<td><input type="text" name="newDependents" value="<?= $user->dependents ?>">
                                 <td><?= $user->neto ?></td>
