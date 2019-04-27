@@ -44,6 +44,10 @@ class DeleteData
         $statement = $pdo->prepare("delete from users where id =:user_id");
         $statement->bindParam(":user_id", $user_id, PDO::PARAM_STR);
         $statement->execute();
+
+		$statement = $pdo->prepare("DELETE FROM data where user_id =:user_id");
+        $statement->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+        $statement->execute();
     }
 }
 
