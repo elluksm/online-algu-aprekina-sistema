@@ -16,8 +16,6 @@ class Salary
     //create User object when reading data from database
 	public $id;
 	public $user_id;
-    public $period_start;
-    public $period_end;
     public $bruto;
     public $taxes_employee;
     public $taxes_employer;
@@ -41,7 +39,7 @@ class ReadOwnData
     //function to read data from User table
     public static function readDataTable($pdo, $user_id)
     {
-        $statement = $pdo->prepare("SELECT id, user_id, period_start, period_end, bruto, taxes_employee, taxes_employer, neto, dependents, date(created_at) as date FROM data WHERE data.user_id = '$user_id'");
+        $statement = $pdo->prepare("SELECT id, user_id, bruto, taxes_employee, taxes_employer, neto, dependents, date(created_at) as date FROM data WHERE data.user_id = '$user_id'");
         $statement->execute();
 
         $salaryData = $statement->fetchAll(PDO::FETCH_CLASS, "Salary");

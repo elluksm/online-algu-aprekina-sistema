@@ -25,8 +25,6 @@ class User
 	
 	public $id_2;
 	public $user_id;
-    public $period_start;
-    public $period_end;
     public $bruto;
     public $taxes_employee;
     public $taxes_employer;

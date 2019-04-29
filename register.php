@@ -101,8 +101,8 @@ if (empty($name_err) && empty($password_err) && empty($email_err) && empty($surn
     unset($stmt);
 
 	//Inserting default data for minimum wage
-	$statement = $pdo->prepare("INSERT INTO data (id, user_id, period_start, period_end, bruto, taxes_employee, taxes_employer, neto, dependents, created_at) VALUES
-(DEFAULT, $last_id, '2019-04-01 00:00:01', '2019-04-30 00:00:00', 430, 123.84, 103.59, 306.16, 0, DEFAULT);");
+	$statement = $pdo->prepare("INSERT INTO data (id, user_id, bruto, taxes_employee, taxes_employer, neto, dependents, created_at) VALUES
+(DEFAULT, $last_id, 430, 123.84, 103.59, 306.16, 0, DEFAULT);");
     $statement->execute();
 
 }
